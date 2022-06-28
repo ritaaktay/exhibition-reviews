@@ -1,7 +1,4 @@
 # Exhibition Reveiws
----
-
-## Introduction
 
 A web app for crowd-sourced exhibition reviews and realted discussions.
 
@@ -16,7 +13,7 @@ Heroku --> [http://a.com](http://a.com)
 - MongoDB 5.0.9
 - EJS 3.1.8
 
-# Future Additions 
+## TO DO 
 - Map view for location based browsing
 - Advanced search features for browsing
 - Log-in for institutions & galleries
