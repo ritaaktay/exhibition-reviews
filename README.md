@@ -16,6 +16,6 @@ Heroku --> [http://a.com](http://a.com)
 - EJS 3.1.8
 
 ## Future Additions
-- Map view for location based browsing
-- Advanced search features for browsing
+- Map view for location-based browsing
+- Advanced search features
 - Log-in for institutions & galleries
