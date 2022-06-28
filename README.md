@@ -8,7 +8,7 @@ Users can add, browse, read and comment on exhibition reveiws.
 
 ## Demo
 
-Heroku --> [http://a.com](http://a.com)
+[https://exhibition-reviews.herokuapp.com/](https://exhibition-reviews.herokuapp.com/)
 
 ## Technologies
 - Express.js 4.18.1
