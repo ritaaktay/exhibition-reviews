@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New User Form</title>
+    <title>New Place Form</title>
 </head>
 <body>
     <header>
-        Exhibition Review App
+       Create New Place
     </header>
-    <form action="/users" method="POST">
+    <form action="/places" method="POST">
         <label> Name: 
             <input type="text" name="name" value="<%=locals.name%>" />
+        </label>
+        <!-- TO DO ADD LOCATIONS -->
+        <label> Location:
+            <input type="text" name="location" value="<%=locals.location%>" />
         </label>
         <button type="submit"> create </button>
     </form>

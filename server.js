@@ -6,12 +6,12 @@ if (process.env.NODE_ENV !== 'production') {
 //APP
 const express = require("express")
 const app = express()
-//logger after favicon so it's not logged
+const bodyParser = require('body-parser')
 app.use(logger)
-app.use(express.urlencoded({ extended : true }))
-app.use(express.json())
+app.use(bodyParser.urlencoded({limit :'10mb', extended: false}))
 app.use(express.static('public'))
 app.listen(process.env.PORT || 8000)
+
 
 //VIEW
 const expressLayouts = require("express-ejs-layouts")
@@ -34,13 +34,16 @@ app.use("/users", userRouter)
 const exhibitionsRouter = require("./routes/exhibitions")
 app.use("/exhibitions", exhibitionsRouter)
 
+const placesRouter = require("./routes/places")
+app.use("/places", placesRouter)
+
 const indexRouter = require("./routes/index")
 app.use("/", indexRouter)
 
 //MIDDLEWARE
 function logger(req, res, next) {
-    //if (req.originalUrl != "/favicon.ico") {
+    if (req.originalUrl != "/favicon.ico") {
         console.log(req.originalUrl)
         next()
-    //}
+    }
 }
