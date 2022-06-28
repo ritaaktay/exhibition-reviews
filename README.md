@@ -15,7 +15,7 @@ Users can add, browse, read and comment on exhibition reveiws.
 - MongoDB 5.0.9
 - EJS 3.1.8
 
-## Future Additions
+## To do's
 - Map view for location-based browsing
 - Advanced search features
 - Log-in for institutions & galleries
