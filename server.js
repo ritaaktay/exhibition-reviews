@@ -6,6 +6,12 @@ if (process.env.NODE_ENV !== 'production') {
 //APP
 const express = require("express")
 const app = express()
+//logger after favicon so it's not logged
+app.use(logger)
+app.use(express.urlencoded({ extended : true }))
+app.use(express.json())
+app.use(express.static('public'))
+app.listen(process.env.PORT || 8000)
 
 //VIEW
 const expressLayouts = require("express-ejs-layouts")
@@ -22,20 +28,6 @@ db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
 
 //CONTROL
-//use middleware here to run on all requests 
-//Express.js works top to bottom   
-app.get("/favicon.ico", (req, res) => {})
-app.use(logger)
-
-//parse JSON information from req.body
-app.use(express.json())
-//middleware to access req.body
-app.use(express.urlencoded({ extended : true }))
-//specify directory from which to serve static files
-//request URL will not have /public, just /test/test.html
-app.use(express.static('public'))
-app.listen(process.env.PORT || 8000)
-
 const userRouter = require("./routes/users")
 app.use("/users", userRouter)
 
@@ -47,6 +39,8 @@ app.use("/", indexRouter)
 
 //MIDDLEWARE
 function logger(req, res, next) {
-    console.log(req.originalUrl)
-    next()
+    //if (req.originalUrl != "/favicon.ico") {
+        console.log(req.originalUrl)
+        next()
+    //}
 }
