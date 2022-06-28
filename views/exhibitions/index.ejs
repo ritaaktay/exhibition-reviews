@@ -1,1 +1,13 @@
-EXHIBITIONS
+<h2>SEARCH</h2>
+<br>
+<form>
+    <label> Title </label>
+    <input type="text" name="title">
+    <button type="submit"> Search </button>
+</form>
+<br>
+<% exhibitions.forEach(exhibition => { %>
+    <div> <%= exhibition.title %> </div>
+    <div> <%= exhibition.review %> </div> 
+    <br>
+<% }) %>

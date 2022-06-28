@@ -4,27 +4,29 @@ const Exhibition = require('../models/exhibition')
 
 router.route('/')
 //ALL EXHIBITIONS
-.get((req, res) => {
-    res.render('exhibitions/index')
+.get(async (req, res) => {
+    try {
+        const exhibitions = await Exhibition.find({})
+        res.render('exhibitions/index', {exhibitions: exhibitions})
+    } catch (err) {
+        res.redirect('/', {errMessage: "Unable to retreive exhibitions"})
+    }
 })
 //CREATE NEW EXHIBITION
-.post((req, res) => {
+.post(async (req, res) => {
     const exhibition = new Exhibition({
         title: req.body.title,
         review: req.body.review
     })
-    //this method saves object to model
-    //and takes a cb for err and new object 
-    exhibition.save((err, newExhibition) => {
-        if (err) {
-            res.render('exhibitions/new', {
-                exhibition: exhibition,
-                errMEssage: "Unable to create new exhibition"
-            })
-        } else {
-            res.redirect(`exhibitions/${newExhibition.id}`)
-        }
-    })
+    try {
+        const newExhibition = await exhibition.save()
+        res.redirect(`exhibitions/${newExhibition.id}`) 
+    } catch {
+        res.render('exhibitions/new', {
+            exhibition: exhibition,
+            errMessage: "Unable to create new exhibition"
+        })
+    }
 })
 //NEW EXHIBITION FORM
 //the new exhibition here is for the update form to display exhibition name and review 

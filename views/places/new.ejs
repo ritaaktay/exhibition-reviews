@@ -12,6 +12,8 @@
     </header>
     <form action="/places" method="POST">
         <label> Name: 
+            <!-- so if we pass an {place : {name: name}} object to render we can use place.name
+            but if we pass a {name : name} we use locals.name? why not locals.place.name? -->
             <input type="text" name="name" value="<%=locals.name%>" />
         </label>
         <!-- TO DO ADD LOCATIONS -->
