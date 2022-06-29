@@ -2,29 +2,29 @@ const express = require('express')
 const router = express.Router()
 
 router.route('/')
-//ALL PLACES
+//ALL LOCATIONS
 .get((req, res) => {
-    res.render('places/index')
+    res.render('locations/index')
 })
-//CREATE NEW PLACE
+//CREATE NEW LOCATION
 .post((req, res) => {
-    res.send('New Place')
+    res.send('New Location')
 })
-//NEW PLACE FORM
+//NEW LOCATION FORM
 router.get('/new', (req,res) => {
-    res.render('places/new')
+    res.render('locations/new')
 })
 
 router.route('/:id')
-//ONE PLACE
+//ONE LOCATION
 .get((req, res) => {
-    res.send(`Place: ${req.params.id}`)
+    res.send(`Location: ${req.params.id}`)
 })
-//UPDATE Place
+//UPDATE LOCATION
 .put((req, res) => {
-    res.send(`Update Place: ${req.params.id}`)
+    res.send(`Update Location: ${req.params.id}`)
 })
-//DELETE EXHIBITION
+//DELETE LOCATION
 .delete((req, res) => {
     res.send(`Delete Place: ${req.params.id}`)
 })

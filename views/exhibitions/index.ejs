@@ -1,10 +1,20 @@
-<h2>SEARCH</h2>
+<h2>RECENTLY ADDED</h2>
 <br>
-<form>
-    <label> Title </label>
-    <input type="text" name="title">
-    <button type="submit"> Search </button>
-</form>
+<% exhibitions.forEach(exhibition => { %>
+    <div> <%= exhibition.title %> </div>
+    <div> <%= exhibition.review %> </div> 
+    <br>
+<% }) %>
+<br>
+<h2>BEST RATED</h2>
+<br>
+<% exhibitions.forEach(exhibition => { %>
+    <div> <%= exhibition.title %> </div>
+    <div> <%= exhibition.review %> </div> 
+    <br>
+<% }) %>
+<br>
+<h2>MOST HEATED</h2>
 <br>
 <% exhibitions.forEach(exhibition => { %>
     <div> <%= exhibition.title %> </div>

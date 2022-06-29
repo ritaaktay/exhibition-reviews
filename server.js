@@ -29,16 +29,14 @@ db.once('open', () => console.log('Connected to Mongoose'))
 
 //CONTROL
 const userRouter = require("./routes/users")
-app.use("/users", userRouter)
-
 const exhibitionsRouter = require("./routes/exhibitions")
-app.use("/exhibitions", exhibitionsRouter)
-
-const placesRouter = require("./routes/places")
-app.use("/places", placesRouter)
-
+const locationsRouter = require("./routes/locations")
 const indexRouter = require("./routes/index")
+
 app.use("/", indexRouter)
+app.use("/users", userRouter)
+app.use("/exhibitions", exhibitionsRouter)
+app.use("/locations", locationsRouter)
 
 //MIDDLEWARE
 function logger(req, res, next) {

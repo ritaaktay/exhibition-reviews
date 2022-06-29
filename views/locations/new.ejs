@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Place Form</title>
+    <title>New Location Form</title>
 </head>
 <body>
     <header>
-       Create New Place
+       Create New Location
     </header>
     <form action="/places" method="POST">
-        <label> Name: 
+        <label> Location:
             <!-- so if we pass an {place : {name: name}} object to render we can use place.name
             but if we pass a {name : name} we use locals.name? why not locals.place.name? -->
-            <input type="text" name="name" value="<%=locals.name%>" />
+            <input type="text" name="name" value="<%=locals.location%>" />
         </label>
         <!-- TO DO ADD LOCATIONS -->
-        <label> Location:
-            <input type="text" name="location" value="<%=locals.location%>" />
+        <label> City:
+            <input type="text" name="location" value="<%=locals.city%>" />
         </label>
         <button type="submit"> create </button>
     </form>
