@@ -21,3 +21,4 @@ Users can add, browse, read and comment on exhibition reveiws.
 - Log-in for institutions & galleries
 - Rating system and top rank homepage displays 
 - Comment notifications
+- Tags
