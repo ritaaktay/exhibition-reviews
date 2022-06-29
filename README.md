@@ -20,5 +20,5 @@ Users can add, browse, read and comment on exhibition reveiws.
 - Advanced search features
 - Log-in for institutions & galleries
 - Rating system and top rank homepage displays 
-- Comment notifications
+- Comment replies and notifications
 - Tags
