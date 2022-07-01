@@ -1,20 +1,18 @@
 const mongoose = require('mongoose')
 
 const locationSchema = mongoose.Schema({
-    place: {
+    location: {
         type: String,
         required: true
     },
     city: {
-        type: String,
-        required: true
+        type: String
     },
-    //HOW TO STORE ARRAY OF ID'S IN EXHIBITIONS
-    exhibitions : {
+    exhibition_ids : [{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Exhibition'
-    }
+    }]
 })
 
 module.exports = mongoose.model('Location', locationSchema)

@@ -1,14 +1,27 @@
 const express = require('express')
 const router = express.Router()
+const Location = require('../models/location')
 
 router.route('/')
 //ALL LOCATIONS
-.get((req, res) => {
-    res.render('locations/index')
+.get(async (req, res) => {
+    const locations = await Location.find({})
+    res.render('locations/index', {locations : locations})
 })
 //CREATE NEW LOCATION
-.post((req, res) => {
-    res.send('New Location')
+.post(async (req, res) => {
+    const location = new Location({
+        location: req.body.location
+    })
+    try {
+        const newLocation = await location.save()
+        res.redirect(`locations/${newLocation.id}`)
+    } catch (error) {
+        res.render('locations/new', {
+            location: location.location,
+            errMessage: `Could not create location ${location.location}`
+        })
+    }
 })
 //NEW LOCATION FORM
 router.get('/new', (req,res) => {
@@ -26,7 +39,7 @@ router.route('/:id')
 })
 //DELETE LOCATION
 .delete((req, res) => {
-    res.send(`Delete Place: ${req.params.id}`)
+    res.send(`Delete Location: ${req.params.id}`)
 })
 
 

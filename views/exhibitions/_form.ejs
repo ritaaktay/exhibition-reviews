@@ -1,6 +1,43 @@
-<label> Title: 
-    <input type="text" name="title" value="<%=exhibition.title%>" />
-</label>
-<label> Review: 
-    <textarea style="width: 100%" name="review" value="<%=exhibition.review%>" ></textarea>
-</label>
+<div>
+    <label> Title  
+        <input type="text" name="title" value="<%=exhibition.title%>" /> 
+    </label> 
+    &nbsp; 
+    <label> Location 
+        <select name="location">
+            <option value="default" selected disabled ></option>
+            <% locations.forEach (location => { %>
+                <% if (location.id === exhibition.location_id) { %> 
+                <option selected value="<%= location._id%>" label="<%= location.location %>"> </option>
+                <% } else { %>
+                <option value="<%= location._id %>" label="<%= location.location%>"> </option>
+                <% } %>
+            <% }) %>
+        </select> 
+    </label> 
+</div>
+<div>
+    <label> Dates: &nbsp; 
+        <label> Start 
+            <input type="date" name="startDate" 
+                value="<%= exhibition.startDate == null ? "" : exhibition.startDate.toISOString().split('T')[0] %>" />
+        </label> 
+        <label> End
+            <input type="date" name="endDate" 
+                value="<%= exhibition.endDate == null ? "" : exhibition.endDate.toISOString().split('T')[0] %>" />
+        </label>
+    </label> 
+</div>
+<div>
+    <lable> Review <br>
+        <textarea style="width:60%" name="review" > <% if (locals.review == null) { %><%= "Your thoughts here..." %> 
+        <% } else { %><%= review.content  %><% } %>
+        </textarea>
+    </lable>
+</div>
+<div>
+    <lable> Images
+        <!-- note file type still needs validation server side -->
+        <input type="file" name="images" accept="image/*">
+    </lable>
+</div>

@@ -10,16 +10,13 @@
     <header>
        Create New Location
     </header>
-    <form action="/places" method="POST">
+    <form action="/locations" method="POST">
         <label> Location:
-            <!-- so if we pass an {place : {name: name}} object to render we can use place.name
-            but if we pass a {name : name} we use locals.name? why not locals.place.name? -->
-            <input type="text" name="name" value="<%=locals.location%>" />
+            <input type="text" name="location" value="<%=locals.location%>" />
         </label>
-        <!-- TO DO ADD LOCATIONS -->
-        <label> City:
+        <!-- <label> City:
             <input type="text" name="location" value="<%=locals.city%>" />
-        </label>
+        </label> -->
         <button type="submit"> create </button>
     </form>
 </body>

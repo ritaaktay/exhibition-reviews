@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Exhibition = require('../models/exhibition')
+const Location = require('../models/location')
+const Review = require('../models/reveiw')
+const User = require('../models/user')
 
 
 //ALL EXHIBITIONS
@@ -38,26 +41,56 @@ router.get('/search', async (req,res) => {
 
 //NEW EXHIBITION FORM
 //the new exhibition here is for the update form to display exhibition name and review 
-router.get('/new', (req,res) => {
-    res.render('exhibitions/new', { exhibition : new Exhibition()})
+router.get('/new', async (req,res) => {
+    const locations = await Location.find({});
+    res.render('exhibitions/new', { 
+        exhibition : new Exhibition(),
+        locations: locations
+        })
 })
 //CREATE NEW EXHIBITION
 router.post('/', async (req, res) => {
-    const exhibition = new Exhibition({
+    //EXHIBITION
+    var exhibition = new Exhibition({
         title: req.body.title,
-        review: req.body.review
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
     })
+    //HELPER FUNC TO RE-RENDER FORM IN CATCH BLOCKS
+    async function rerender(message) {
+        let locations = await Location.find({})
+        res.render('exhibitions/new', { exhibition : exhibition,
+            locations : locations,
+            errMessage : message})
+    }
+    //LOCATION
+    //figure out how to select existing or add new 
+    var location = await Location.findOne({_id : req.body.location})
     try {
-        const newExhibition = await exhibition.save()
-        res.redirect(`exhibitions/${newExhibition.id}`) 
+        await location.save()
+        exhibition.location_id = location._id
     } catch {
-        res.render('exhibitions/new', {
-            exhibition: exhibition,
-            errMessage: "Unable to create new exhibition"
-        })
+        rerender("Could not create location")
+    }
+    // REVIEW
+    let review = new Review ({content: req.body.review, exhibition_id: exhibition._id})
+    try {
+        await review.save()
+        exhibition.review_ids = [review._id]
+    } catch {
+        rerender("Could not create review")
+    }
+    try {
+        await exhibition.save()
+        //if this is the first exhibition being added to that location we cannot push
+        if (location.exhibition_ids != null) location.exhibition_ids.push(exhibition._id)
+        else location.exhibition_ids = [exhibition._id]
+        //here .id (not ._id) because we want a string in the url
+        res.redirect(`exhibitions/${exhibition.id}`)
+    } catch {
+        rerender("Could not create exhibition")
     }
 })
-
 
 router.route('/:id')
 //ONE EXHIBITION
