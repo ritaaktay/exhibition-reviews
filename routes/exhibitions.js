@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Exhibition = require('../models/exhibition')
 const Location = require('../models/location')
+const reveiw = require('../models/reveiw')
 const Review = require('../models/reveiw')
 const User = require('../models/user')
 
@@ -44,7 +45,11 @@ router.get('/search', async (req,res) => {
 router.get('/new', async (req,res) => {
     const locations = await Location.find({});
     res.render('exhibitions/new', { 
-        exhibition : new Exhibition(),
+        //still don't understand locals  the locals object - 
+        //is there no better way than passing in 
+        //empty document or doing conditionals in the view?
+        review: new Review(),
+        exhibition: new Exhibition(),
         locations: locations
         })
 })
@@ -53,25 +58,20 @@ router.post('/', async (req, res) => {
     //EXHIBITION
     var exhibition = new Exhibition({
         title: req.body.title,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate
     })
     //HELPER FUNC TO RE-RENDER FORM IN CATCH BLOCKS
     async function rerender(message) {
         let locations = await Location.find({})
-        res.render('exhibitions/new', { exhibition : exhibition,
+        res.render('exhibitions/new', { 
+            exhibition : exhibition,
             locations : locations,
+            review : req.body.review,
             errMessage : message})
     }
     //LOCATION
-    //figure out how to select existing or add new 
     var location = await Location.findOne({_id : req.body.location})
-    try {
-        await location.save()
-        exhibition.location_id = location._id
-    } catch {
-        rerender("Could not create location")
-    }
+    if (location == null) return rerender("Please select a location")
+    else exhibition.location_id = location._id
     // REVIEW
     let review = new Review ({content: req.body.review, exhibition_id: exhibition._id})
     try {
@@ -81,6 +81,7 @@ router.post('/', async (req, res) => {
         rerender("Could not create review")
     }
     try {
+        console.log(exhibition)
         await exhibition.save()
         //if this is the first exhibition being added to that location we cannot push
         if (location.exhibition_ids != null) location.exhibition_ids.push(exhibition._id)
@@ -88,6 +89,9 @@ router.post('/', async (req, res) => {
         //here .id (not ._id) because we want a string in the url
         res.redirect(`exhibitions/${exhibition.id}`)
     } catch {
+        //delete review if exhibition save fails
+        await Review.deleteOne({ _id: review._id }) 
+        //exhibition._Id was only added to location on succesfull exhibition save
         rerender("Could not create exhibition")
     }
 })

@@ -1,10 +1,12 @@
 <div>
-    <label> Title  
-        <input type="text" name="title" value="<%=exhibition.title%>" /> 
+    <label> Title<sup>*</sup>  
+        <input required type="text" name="title" value="<%=exhibition.title%>" /> 
     </label> 
-    &nbsp; 
-    <label> Location 
-        <select name="location">
+</div>
+<br>
+<div>
+    <label> Location<sup>*</sup>
+        <select required name="location">
             <option value="default" selected disabled ></option>
             <% locations.forEach (location => { %>
                 <% if (location.id === exhibition.location_id) { %> 
@@ -16,9 +18,10 @@
         </select> 
     </label> 
 </div>
-<div>
+<br>
+<!-- <div>
     <label> Dates: &nbsp; 
-        <label> Start 
+        <label> Start<sup>*</sup>
             <input type="date" name="startDate" 
                 value="<%= exhibition.startDate == null ? "" : exhibition.startDate.toISOString().split('T')[0] %>" />
         </label> 
@@ -27,14 +30,14 @@
                 value="<%= exhibition.endDate == null ? "" : exhibition.endDate.toISOString().split('T')[0] %>" />
         </label>
     </label> 
-</div>
+</div> -->
 <div>
-    <lable> Review <br>
-        <textarea style="width:60%" name="review" > <% if (locals.review == null) { %><%= "Your thoughts here..." %> 
-        <% } else { %><%= review.content  %><% } %>
-        </textarea>
+    <lable> Review<sup>*</sup> <br>
+        <!-- add instruction that automatically clears when <textarea> receives focus -->
+        <textarea required style="width:60%" name="review" ><%= review.content %></textarea>
     </lable>
 </div>
+<br>
 <div>
     <lable> Images
         <!-- note file type still needs validation server side -->

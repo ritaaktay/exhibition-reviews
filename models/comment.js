@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Review = require('./reveiw')
 
 const commentSchema = mongoose.Schema({
     user_id: {
@@ -20,6 +21,15 @@ const commentSchema = mongoose.Schema({
         type: String,
         required: true
     }
+})
+
+//MIDDLEWARE DELETES COMMENT REFERENCE IN PARENT REVIEW
+commentSchema.pre('remove', async function(next){
+    await Review.updateOne(
+        {_id: this.review_id}, 
+        {$pull : {comment_ids : this._id}}
+        )
+    next()
 })
 
 module.exports = mongoose.model('Comment', commentSchema)
