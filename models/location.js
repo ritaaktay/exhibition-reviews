@@ -10,6 +10,7 @@ const locationSchema = mongoose.Schema({
     },
     exhibition_ids : [{
         type: mongoose.Schema.Types.ObjectId,
+        // locations still get creates with empty exhibition_ids array
         required: true,
         ref: 'Exhibition'
     }]

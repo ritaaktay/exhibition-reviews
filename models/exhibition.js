@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Review = require('./reveiw')
 const Location = require('./location')
 const Comment = require('./comment')
+const fs = require('fs')
+const path = require('path')
 
 const exhibitionSchema = mongoose.Schema({
     title : {
@@ -45,12 +47,18 @@ const exhibitionSchema = mongoose.Schema({
 exhibitionSchema.pre('remove', async function(next) {
     await Location.updateOne(
         {_id: this.location_id},
-        {$pull : {exhibitions: this._id}}
-        )
+        {$pull : {exhibition_ids: this._id}}
+    )
     for (let id of this.review_ids) {
         let review = await Review.findOne({_id: id})
         for (let comment of review.comment_ids) {
             await Comment.deleteOne({_id: comment})
+        }
+        for (let image of review.images) {
+            
+            fs.unlink(path.join('public/uploads/review_images', image), (err) => {
+                if (err) console.error(err)
+            })
         }
         await Review.deleteOne({_id:id})
     }

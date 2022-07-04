@@ -34,13 +34,13 @@
 <div>
     <lable> Review<sup>*</sup> <br>
         <!-- add instruction that automatically clears when <textarea> receives focus -->
-        <textarea required style="width:60%" name="review" ><%= review.content %></textarea>
+        <textarea required style="width:60%" name="review" ><%= review %></textarea>
     </lable>
 </div>
 <br>
 <div>
     <lable> Images
         <!-- note file type still needs validation server side -->
-        <input type="file" name="images" accept="image/*">
+        <input type="file" name="image" accept="image/*" multiple >
     </lable>
 </div>

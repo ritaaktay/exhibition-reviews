@@ -2,7 +2,10 @@
 <br>
 <% exhibitions.forEach(exhibition => { %>
     <div> <%= exhibition.title %> </div>
-    <!-- <div> <%= exhibition.review %> </div>  -->
+    <div> <%= reviewMap[exhibition._id].content %> </div>
+    <form method="POST" action="exhibitions/<%=exhibition.id%>?_method=DELETE">
+        <button type="submit">DELETE</button>
+    </form>
     <br>
 <% }) %>
 <!-- <br>

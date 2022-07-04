@@ -10,7 +10,7 @@
     <header>
         <h2> New Exhibition </h2>
     </header>
-    <form action="/exhibitions" method="POST">
+    <form action="/exhibitions" method="POST" enctype="multipart/form-data">
         <%- include("../exhibitions/_form.ejs") %>
         <br>
         <button type="submit"> create </button>
