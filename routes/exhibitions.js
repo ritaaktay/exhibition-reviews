@@ -1,67 +1,55 @@
-const express = require('express')
-const multer = require('multer')
+//NODE
 const path = require('path')
+const fs = require('fs')
+//APP
+const express = require('express')
 const router = express.Router()
+//MODELS
 const Exhibition = require('../models/exhibition')
 const Location = require('../models/location')
 const Review = require('../models/reveiw')
+const Comment = require('../models/comment')
 const User = require('../models/user')
+//SCRIPTS
+const upload = require('../scripts/upload')
+const { text } = require('body-parser')
 
 //ALL EXHIBITIONS
 //ADD RECENTLY ADDED, HIGHEST RATED, MOST HEATED
 router.get('/', async (req, res) => {
-    renderExhibitions(res)
-})
-//SEARCH EXHIBITIONS
-//ADD SUPPORT FOR MULTIPLE SEARCH PARAMETERS
-router.get('/search', async (req,res) => {
+    //SEARCH
     let searchOptions = {}
-    if (req.query.title != null && req.query.title != "") {
-        searchOptions.title = new RegExp (req.query.title, 'i')
+    if (req.query.title != null) {
+        searchOptions.title = new RegExp(req.query.title, 'i')
     }
-    if (req.query.keyword != null && req.query.keyword != "") {
-        searchOptions.review = new RegExp (req.query.keyword, 'i')
-    }
+    //RENDER
     try {
         const exhibitions = await Exhibition.find(searchOptions)
-        res.render('exhibitions/search', {
+        var reviewMap = {};
+        for (let exhibition of exhibitions) {
+            //displays first submitted review of exhibition 
+            let review = await Review.findOne({_id : exhibition.review_ids[0]})
+            reviewMap[exhibition._id] = review
+        }
+        res.render('exhibitions/index', {
             exhibitions: exhibitions,
+            reviewMap : reviewMap,
             searchOptions : req.query
         })
     } catch (err) {
-        res.redirect('/', {errMessage: "Unable to retreive exhibitions"})
+        res.send(err.message)
     }
 })
+
 
 //NEW EXHIBITION FORM 
 router.get('/new', async (req,res) => {
     const locations = await Location.find({});
     res.render('exhibitions/new', { 
-        //still don't understand locals  the locals object - 
-        //is there no better way than passing in 
-        //empty document or doing conditionals in the view?
         review: "",
         exhibition: new Exhibition(),
         locations: locations
         })
-})
-
-//CONFIG MULTER 
-const imageMimeTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join('public', Review.imageBasePath))
-  },
-  filename: function (req, file, cb) {
-    let title = req.body.title.split(" ")[0]
-    cb(null, title + '_' + Date.now() + '.png')
-  }
-});
-const upload = multer({ 
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        cb(null, imageMimeTypes.includes(file.mimetype))
-    }
 })
 
 // CREATE NEW EXHIBITION
@@ -70,8 +58,13 @@ router.post('/', upload.array('image', 10), async (req, res) => {
     var exhibition = new Exhibition({
         title: req.body.title,
     })
-    //HELPER FUNC TO RE-RENDER FORM IN CATCH BLOCKS
+    //HELPER FUNC FOR CATCH BLOCKS
     async function rerender(message) {
+        req.files.forEach (file => {
+            fs.unlink(path.join('public', Review.imageBasePath, file.filename), err => {
+                if (err) console.error(err)
+            })
+        })
         let locations = await Location.find({})
         res.render('exhibitions/new', { 
             exhibition : exhibition,
@@ -111,8 +104,30 @@ router.post('/', upload.array('image', 10), async (req, res) => {
 
 router.route('/:id')
 //ONE EXHIBITION
-.get((req, res) => {
-    res.send(`Exhibition: ${req.params.id}`)
+.get(async (req, res) => {
+    try {
+        const exhibition = await Exhibition.findOne({_id: `${req.params.id}`})
+        const location = await Location.findOne({_id: exhibition.location_id})
+        var reviews = []
+        var commentMap = {}
+        for (let id of exhibition.review_ids) {
+            let review = await Review.findOne({_id: id})
+            reviews.push(review)
+            let comments = []
+            for (let comment of review.comment_ids) {
+                comments.push(await Comment.findOne({_id: comment}))
+            }
+            commentMap[review.id] = comments
+        }
+        res.render('exhibitions/exhibition', {
+            exhibition: exhibition,
+            location: location,
+            reviews: reviews,
+            commentMap: commentMap
+        })
+    } catch (err) {
+        res.send(err.message)
+    }
 })
 //UPDATE EXHIBITION
 .put((req, res) => {
@@ -125,23 +140,5 @@ router.route('/:id')
     res.redirect('/exhibitions')
 })
 
-//FUNCTIONS
-async function renderExhibitions(res) {
-    try {
-        const exhibitions = await Exhibition.find()
-        var reviewMap = {};
-        for (let exhibition of exhibitions) {
-            //displays first submitted review of exhibition 
-            let review = await Review.findOne({_id : exhibition.review_ids[0]})
-            reviewMap[exhibition._id] = review
-        }
-        res.render('exhibitions/index', {
-            exhibitions: exhibitions,
-            reviewMap : reviewMap
-        })
-    } catch (err) {
-        res.send(err.message)
-    }
-}
 
 module.exports = router

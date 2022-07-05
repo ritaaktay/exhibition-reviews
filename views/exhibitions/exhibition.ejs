@@ -1,23 +1,23 @@
-<!-- //to this page we will send a single exhibition and it will contain the IDs 
-//for the reviews and the reviews will contain the IDs for the comments
+<!-- context variables are exhibition = exhibition document, 
+    location = location document,
+    reviews = array of review documents, 
+    commentMap = review.ids mapped to arrays of comment documents -->
+<body>
+    <h2> <%=exhibition.title%> </h2>
+    <span> <%=location.location%> </span> <br>
+    <br>
+    <form action="/reviews" method="POST" enctype="multipart/form-data">
+        <lable> Your thoughts: <br>
+            <textarea required style="width:60%" name="review" ></textarea>
+        </lable> <br>
+        <lable> Images <input type="file" name="image" accept="image/*" multiple > </lable> <br>
+        <!-- I want this button to display/hide form onclick -->
+        <button type="submit" name="exhibition" value="<%=exhibition._id%>"> + </button>
+    </form>
+    <br>
+    <% reviews.forEach(review => { %>
+        <%- include('./_review.ejs', {review: review, commentMap: commentMap}) %>
+    <% }) %>
+    
+</body>
 
-exhibition.forEach {
-    //exhibition info
-    reviews.forEarch {
-        //review info 
-        comments.forEach {
-            //comment info
-        }
-    }
-}
-
-or, can we pass options to include, so as to pass down the review & comments?
-
-exhibition.forEach {
-    //exhibition info
-    reviews.forEarch {
-      include('./_review.ej') 
-    }
-}
-
--->

@@ -1,0 +1,8 @@
+<!-- context variable reviews = array of all Reviews 
+exhibitionMap = review ids mapepd to exhibition documents-->
+<% reviews.forEach(review => { %>
+    <div> <%= review.content %> </div>
+    <div> <%= review.createdAt %> </div>
+    <div> <a href="/exhibitions/<%=exhibitionMap[review.id].id%>" > 
+        <%= exhibitionMap[review.id].title %> </a> </div>
+<% }) %>

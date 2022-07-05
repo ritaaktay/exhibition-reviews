@@ -1,26 +1,17 @@
-<h2>RECENTLY ADDED</h2>
-<br>
+<%- include('./_search', {searchOptions:searchOptions}) %>
 <% exhibitions.forEach(exhibition => { %>
-    <div> <%= exhibition.title %> </div>
+    <div> <a href="/exhibitions/<%=exhibition.id%>"> <%= exhibition.title %> </a> </div>
     <div> <%= reviewMap[exhibition._id].content %> </div>
     <form method="POST" action="exhibitions/<%=exhibition.id%>?_method=DELETE">
         <button type="submit">DELETE</button>
     </form>
     <br>
 <% }) %>
-<!-- <br>
+
+
+<!-- <h2>RECENTLY ADDED</h2>
+<br>
 <h2>BEST RATED</h2>
 <br>
-<% exhibitions.forEach(exhibition => { %>
-    <div> <%= exhibition.title %> </div>
-    <div> <%= exhibition.review %> </div> 
-    <br>
-<% }) %>
-<br>
 <h2>MOST HEATED</h2>
-<br>
-<% exhibitions.forEach(exhibition => { %>
-    <div> <%= exhibition.title %> </div>
-    <div> <%= exhibition.review %> </div> 
-    <br>
-<% }) %> -->
+<br> -->

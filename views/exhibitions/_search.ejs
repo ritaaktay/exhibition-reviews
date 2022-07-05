@@ -1,10 +1,6 @@
-<h2>SEARCH</h2>
-<br>
-<form>
+<form action="/exhibitions" method="GET">
     <label> Title </label>
     <input type="text" name="title" value="<%=searchOptions.title%>">
-    <label> Keyword </label>
-    <input type="text" name="keyword" value="<%=searchOptions.keyword%>">
     <!-- <label> Place </label>
     <input type="text" name="place" value="<%=searchOptions.place%>">
     <label> City </label>
@@ -14,8 +10,3 @@
     <button type="submit"> Search </button>
 </form>
 <br>
-<% exhibitions.forEach(exhibition => { %>
-    <div> <%= exhibition.title %> </div>
-    <div> <%= exhibition.review %> </div> 
-    <br>
-<% }) %>

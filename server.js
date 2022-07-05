@@ -34,11 +34,15 @@ const userRouter = require("./routes/users")
 const exhibitionsRouter = require("./routes/exhibitions")
 const locationsRouter = require("./routes/locations")
 const indexRouter = require("./routes/index")
+const reviewsRouter = require("./routes/reviews")
+const commentsRouter = require("./routes/comments")
 
 app.use("/", indexRouter)
 app.use("/users", userRouter)
 app.use("/exhibitions", exhibitionsRouter)
 app.use("/locations", locationsRouter)
+app.use("/reviews", reviewsRouter)
+app.use("/comments", commentsRouter)
 
 //MIDDLEWARE
 function logger(req, res, next) {
