@@ -45,8 +45,10 @@ router.get('/', async (req, res) => {
             //displays last submitted review of exhibition 
             let review = await Review.findOne(
                 {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
-            reviewMap[exhibition._id] = review
+            reviewMap[exhibition.id] = review
+            console.log(reviewMap[exhibition.id].content)
         }
+        console.log(reviewMap)
         res.render('exhibitions/index', {
             exhibitions: exhibitions,
             reviewMap : reviewMap,
