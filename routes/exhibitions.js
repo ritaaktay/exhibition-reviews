@@ -19,10 +19,13 @@ const { query } = require('express')
 //ADD RECENTLY ADDED, HIGHEST RATED, MOST HEATED
 router.get('/', async (req, res) => {
     let filter = {}
-    if (req.query.title != null) filter.title = new RegExp(req.query.title, 'i')
+    if (req.query.title != null && req.query.title != "") {
+        filter.title = new RegExp(req.query.title, 'i')
+    }
+    let query = Exhibition.find(filter).sort({createdAt:'desc'})
     let exhibitions = []
-    for (let exhibition of await Exhibition.find(filter)) {
-        if (req.query.lastReviewed != null) {
+    for (let exhibition of await query.exec()) {
+        if (req.query.lastReviewed != null && req.query.lastReviewed != "") {
             for (let id of exhibition.review_ids) {
             
                     let review = await Review.findById(id)
