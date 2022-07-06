@@ -1,5 +1,7 @@
 <!-- context variables are comment = comment document -->
 <div>
     <p> <%= comment.content %> </p>
-    <span> <%= comment.createdAt %> </span>
+    <span> <%= comment.createdAt.toLocaleString('en-UK', {
+        timeStyle: "short",
+        dateStyle: "medium"}) %> </span>
 </div>

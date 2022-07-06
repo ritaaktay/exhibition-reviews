@@ -38,7 +38,7 @@ router.route('/')
         //findOneAndUpdate (so it also returns the updated)
         var exhibition = await Exhibition.findOne({_id: req.body.exhibition})
         exhibition.review_ids.push(review._id)
-        exhibition.save()
+        await exhibition.save()
         res.redirect(`exhibitions/${exhibition.id}`)
     } catch (err) {
         res.send(err)

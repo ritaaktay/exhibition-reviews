@@ -13,22 +13,35 @@ const User = require('../models/user')
 //SCRIPTS
 const upload = require('../scripts/upload')
 const { text } = require('body-parser')
+const { query } = require('express')
 
 //ALL EXHIBITIONS
 //ADD RECENTLY ADDED, HIGHEST RATED, MOST HEATED
 router.get('/', async (req, res) => {
-    //SEARCH
-    let searchOptions = {}
-    if (req.query.title != null) {
-        searchOptions.title = new RegExp(req.query.title, 'i')
+    let filter = {}
+    if (req.query.title != null) filter.title = new RegExp(req.query.title, 'i')
+    let exhibitions = []
+    for (let exhibition of await Exhibition.find(filter)) {
+        if (req.query.lastReviewed != null) {
+            for (let id of exhibition.review_ids) {
+            
+                    let review = await Review.findById(id)
+                    if (review.createdAt >= new Date(req.query.lastReviewed)) {
+                        exhibitions.push(exhibition)
+                        break
+                    }
+            } 
+        } else {
+            exhibitions.push(exhibition)
+        }
     }
     //RENDER
     try {
-        const exhibitions = await Exhibition.find(searchOptions)
         var reviewMap = {};
         for (let exhibition of exhibitions) {
-            //displays first submitted review of exhibition 
-            let review = await Review.findOne({_id : exhibition.review_ids[0]})
+            //displays last submitted review of exhibition 
+            let review = await Review.findOne(
+                {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
             reviewMap[exhibition._id] = review
         }
         res.render('exhibitions/index', {
@@ -40,7 +53,6 @@ router.get('/', async (req, res) => {
         res.send(err.message)
     }
 })
-
 
 //NEW EXHIBITION FORM 
 router.get('/new', async (req,res) => {
