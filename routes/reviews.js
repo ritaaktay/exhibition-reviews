@@ -6,7 +6,6 @@ const Review = require('../models/reveiw')
 const Exhibition = require('../models/exhibition')
 //SCRIPTS
 const upload = require('../scripts/upload')
-const { restart } = require('nodemon')
 
 router.route('/')
 //ALL REVIEWS
