@@ -4,9 +4,11 @@
     <strong>Review</strong> 
     <br>
     <p> <%= review.content%> </p>
-    <% review.imagePaths.forEach(path => { %>
-        <img height="150" width=""100" src="<%=path%>">
+    <div>
+    <% review.decodedImages.forEach(image => { %>
+        <img height=200 src="<%=image%>"> 
     <% }) %>
+    </div> <br>
     <span> <%= review.createdAt.toLocaleString('en-UK', {
                     timeStyle: "short",
                     dateStyle: "medium"})%> </span>

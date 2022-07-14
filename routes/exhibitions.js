@@ -10,10 +10,6 @@ const Location = require('../models/location')
 const Review = require('../models/reveiw')
 const Comment = require('../models/comment')
 const User = require('../models/user')
-//SCRIPTS
-const upload = require('../scripts/upload')
-const { text } = require('body-parser')
-const { query } = require('express')
 
 //ALL EXHIBITIONS
 //ADD RECENTLY ADDED, HIGHEST RATED, MOST HEATED
@@ -27,7 +23,6 @@ router.get('/', async (req, res) => {
     for (let exhibition of await query.exec()) {
         if (req.query.lastReviewed != null && req.query.lastReviewed != "") {
             for (let id of exhibition.review_ids) {
-            
                     let review = await Review.findById(id)
                     if (review.createdAt >= new Date(req.query.lastReviewed)) {
                         exhibitions.push(exhibition)
@@ -46,9 +41,7 @@ router.get('/', async (req, res) => {
             let review = await Review.findOne(
                 {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
             reviewMap[exhibition.id] = review
-            console.log(reviewMap[exhibition.id].content)
         }
-        console.log(reviewMap)
         res.render('exhibitions/index', {
             exhibitions: exhibitions,
             reviewMap : reviewMap,
@@ -70,18 +63,13 @@ router.get('/new', async (req,res) => {
 })
 
 // CREATE NEW EXHIBITION
-router.post('/', upload.array('image', 10), async (req, res) => {
+router.post('/', async (req, res) => {
     //EXHIBITION
     var exhibition = new Exhibition({
         title: req.body.title,
     })
     //HELPER FUNC FOR CATCH BLOCKS
     async function rerender(message) {
-        req.files.forEach (file => {
-            fs.unlink(path.join('public', Review.imageBasePath, file.filename), err => {
-                if (err) console.error(err)
-            })
-        })
         let locations = await Location.find({})
         res.render('exhibitions/new', { 
             exhibition : exhibition,
@@ -96,9 +84,7 @@ router.post('/', upload.array('image', 10), async (req, res) => {
     // REVIEW
     let review = new Review ({content: req.body.review, 
                               exhibition_id: exhibition._id,
-                              images: []})
-    //IMAGES
-    req.files.forEach(file => review.images.push(file.filename))
+                              images: saveImages(req.body.filepond)})
     try {
         await review.save()
         exhibition.review_ids = [review._id]
@@ -157,5 +143,26 @@ router.route('/:id')
     res.redirect('/exhibitions')
 })
 
+function saveImages(filepond) {
+    console.log(filepond)   
+    if (filepond == null || filepond == "") return
+    const images = []
+    if (typeof filepond == 'string') {
+        parsed = JSON.parse(filepond)
+            if (parsed != null) images.push({
+                data: new Buffer.from(parsed.data, 'base64'),
+                type: parsed.type
+            })
+    } else {
+        filepond.forEach(image => {
+             parsed = JSON.parse(image)
+            if (parsed != null) images.push({
+                data: new Buffer.from(parsed.data, 'base64'),
+                type: parsed.type
+            })
+        })
+    }
+    return images 
+}
 
 module.exports = router

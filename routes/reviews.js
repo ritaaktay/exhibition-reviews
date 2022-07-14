@@ -4,8 +4,6 @@ const router = express.Router()
 //MODELS
 const Review = require('../models/reveiw')
 const Exhibition = require('../models/exhibition')
-//SCRIPTS
-const upload = require('../scripts/upload')
 
 router.route('/')
 //ALL REVIEWS
@@ -24,17 +22,14 @@ router.route('/')
 //CREATE NEW REVIEW
 //here req.body.exhibition should be exhibition.id
 //from the form submission on exhibition page 
-.post(upload.array('image', 10), async (req, res) => {
+.post(async (req, res) => {
     var review = new Review ({
         content: req.body.review,
         exhibition_id: req.body.exhibition,
+        images: saveImages(req.body.filepond)
     })
-    for (let file of req.files) {
-        review.images.push(file.filename)
-    }
     try {
         await review.save()
-        //findOneAndUpdate (so it also returns the updated)
         var exhibition = await Exhibition.findOne({_id: req.body.exhibition})
         exhibition.review_ids.push(review._id)
         await exhibition.save()
@@ -58,5 +53,25 @@ router.route('/:id')
     res.send(`Delete Review: ${req.params.id}`)
 })
 
+function saveImages(filepond) {
+    if (filepond == null || filepond == "") return
+    const images = []
+    if (typeof filepond == 'string') {
+        parsed = JSON.parse(filepond)
+            if (parsed != null) images.push({
+                data: new Buffer.from(parsed.data, 'base64'),
+                type: parsed.type
+            })
+    } else {
+        filepond.forEach(image => {
+             parsed = JSON.parse(image)
+            if (parsed != null) images.push({
+                data: new Buffer.from(parsed.data, 'base64'),
+                type: parsed.type
+            })
+        })
+    }
+    return images 
+}
 
 module.exports = router

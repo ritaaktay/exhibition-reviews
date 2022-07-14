@@ -54,12 +54,6 @@ exhibitionSchema.pre('remove', async function(next) {
         for (let comment of review.comment_ids) {
             await Comment.deleteOne({_id: comment})
         }
-        for (let image of review.images) {
-            
-            fs.unlink(path.join('public/uploads/review_images', image), (err) => {
-                if (err) console.error(err)
-            })
-        }
         await Review.deleteOne({_id:id})
     }
     next()

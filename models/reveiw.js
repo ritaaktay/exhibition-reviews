@@ -25,6 +25,7 @@ const reviewSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    //use an array of objects {data : JSON , type: imageType}
     images: {
         type: Array
     },
@@ -46,10 +47,17 @@ reviewSchema.pre('remove', async function(next) {
     next()
 })
 
-reviewSchema.virtual('imagePaths').get(function() {
-    return this.images.map( image => {
-        return path.join('public', imageBasePath, image)
-    })
+//this is for a single image
+reviewSchema.virtual('decodedImages').get(function() {
+    if (this.images != null) {
+        let decoded= []
+        this.images.forEach(image => {
+            decoded.push(
+                `data:${image.type};charset=utf-8;base64,${image.data.toString('base64')}`
+            )
+        })
+        return decoded
+    }
 })
 
 module.exports = mongoose.model('Review', reviewSchema)
