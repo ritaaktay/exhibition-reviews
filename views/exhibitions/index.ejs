@@ -1,5 +1,7 @@
 <%- include('./_search', {searchOptions:searchOptions}) %>
 <% exhibitions.forEach(exhibition => { %>
+    
+    <img height=50 src="<%= imageMap[exhibition.id]%>" >
     <div> <a href="/exhibitions/<%=exhibition.id%>"> <%= exhibition.title %> </a> </div>
     <div> <%= reviewMap[exhibition.id].content %> </div>
     <form method="POST" action="exhibitions/<%=exhibition.id%>?_method=DELETE">

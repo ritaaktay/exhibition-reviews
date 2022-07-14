@@ -60,5 +60,16 @@ reviewSchema.virtual('decodedImages').get(function() {
     }
 })
 
+//if review has no images, returns false
+//if review has images, returns the first image as data URL
+reviewSchema.virtual('hasImage').get(function () {
+    if (this.images.length>0) {
+        let image = this.images[0]
+        return `data:${image.type};charset=utf-8;base64,${image.data.toString('base64')}`
+    } else {
+        return false
+    }
+})
+
 module.exports = mongoose.model('Review', reviewSchema)
 module.exports.imageBasePath = imageBasePath

@@ -35,16 +35,10 @@ router.get('/', async (req, res) => {
     }
     //RENDER
     try {
-        var reviewMap = {};
-        for (let exhibition of exhibitions) {
-            //displays last submitted review of exhibition 
-            let review = await Review.findOne(
-                {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
-            reviewMap[exhibition.id] = review
-        }
         res.render('exhibitions/index', {
             exhibitions: exhibitions,
-            reviewMap : reviewMap,
+            reviewMap : await getLastReviews(exhibitions),
+            imageMap : await getThumbnails(exhibitions),
             searchOptions : req.query
         })
     } catch (err) {
@@ -163,6 +157,34 @@ function saveImages(filepond) {
         })
     }
     return images 
+}
+
+async function getLastReviews(exhibitions) {
+    var reviewMap = {};
+    for (let exhibition of exhibitions) {
+        //displays last submitted review of exhibition 
+        let lastReview = await Review.findOne(
+            {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
+        reviewMap[exhibition.id] = lastReview
+        console.log(reviewMap)
+    }
+    return reviewMap
+}
+
+async function getThumbnails(exhibitions) {
+    var imageMap = {};
+    for (let exhibition of exhibitions) {
+        //looks up all reviews and finds one with image, if any
+        for (let id of exhibition.review_ids) {
+            let review = await Review.findOne({_id : id})
+            if (review.hasImage == false) continue
+            else {
+                imageMap[exhibition.id] = review.hasImage
+                break
+            }
+        }
+    }
+    return imageMap
 }
 
 module.exports = router
