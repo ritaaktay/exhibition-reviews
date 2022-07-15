@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Review = require('./reveiw')
+const Review = require('./review')
 
 const commentSchema = mongoose.Schema({
     user_id: {

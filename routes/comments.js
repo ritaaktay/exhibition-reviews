@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 //MODELS
 const Exhibition = require('../models/exhibition')
-const Review = require('../models/reveiw')
+const Review = require('../models/review')
 const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 

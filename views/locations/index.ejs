@@ -1,6 +1,4 @@
-<h2>LOCATIONS</h2>
 <br>
-<!-- CHANGE TO LINKS -->
 <% locations.forEach(location => { %>
-    <div> <%= location.location %> </div>
+    <div> <a href="/locations/<%=location.id%>"> <%= location.location %> </a> </div>
 <% }) %>

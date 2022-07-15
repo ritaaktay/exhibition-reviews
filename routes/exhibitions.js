@@ -7,7 +7,7 @@ const router = express.Router()
 //MODELS
 const Exhibition = require('../models/exhibition')
 const Location = require('../models/location')
-const Review = require('../models/reveiw')
+const Review = require('../models/review')
 const Comment = require('../models/comment')
 const User = require('../models/user')
 
@@ -17,6 +17,9 @@ router.get('/', async (req, res) => {
     let filter = {}
     if (req.query.title != null && req.query.title != "") {
         filter.title = new RegExp(req.query.title, 'i')
+    }
+    if ((req.query.location) != null && req.query.location != "") {
+        filter.location_id = req.query.location
     }
     let query = Exhibition.find(filter).sort({createdAt:'desc'})
     let exhibitions = []
@@ -36,6 +39,7 @@ router.get('/', async (req, res) => {
     //RENDER
     try {
         res.render('exhibitions/index', {
+            locations: await Location.find({}).sort({location:1}),
             exhibitions: exhibitions,
             reviewMap : await getLastReviews(exhibitions),
             imageMap : await getThumbnails(exhibitions),
@@ -48,7 +52,7 @@ router.get('/', async (req, res) => {
 
 //NEW EXHIBITION FORM 
 router.get('/new', async (req,res) => {
-    const locations = await Location.find({});
+    const locations = await Location.find({}).sort({location:1});
     res.render('exhibitions/new', { 
         review: "",
         exhibition: new Exhibition(),
@@ -103,7 +107,7 @@ router.route('/:id')
 //ONE EXHIBITION
 .get(async (req, res) => {
     try {
-        const exhibition = await Exhibition.findOne({_id: `${req.params.id}`})
+        const exhibition = await Exhibition.findOne({_id: req.params.id})
         const location = await Location.findOne({_id: exhibition.location_id})
         var reviews = []
         var commentMap = {}
@@ -166,7 +170,6 @@ async function getLastReviews(exhibitions) {
         let lastReview = await Review.findOne(
             {_id : exhibition.review_ids[exhibition.review_ids.length-1]})
         reviewMap[exhibition.id] = lastReview
-        console.log(reviewMap)
     }
     return reviewMap
 }

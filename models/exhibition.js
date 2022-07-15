@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Review = require('./reveiw')
+const Review = require('./review')
 const Location = require('./location')
 const Comment = require('./comment')
 const fs = require('fs')
@@ -58,5 +58,6 @@ exhibitionSchema.pre('remove', async function(next) {
     }
     next()
 })
+
 
 module.exports = mongoose.model('Exhibition', exhibitionSchema)

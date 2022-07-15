@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router()
 //MODELS
-const Review = require('../models/reveiw')
+const Review = require('../models/review')
 const Exhibition = require('../models/exhibition')
 
 router.route('/')

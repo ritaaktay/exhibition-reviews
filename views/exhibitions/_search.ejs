@@ -1,14 +1,20 @@
 <form action="/exhibitions" method="GET">
     <label> Title </label>
     <input type="text" name="title" value="<%=searchOptions.title%>">
-    <label> Latest review: </label>
+    <label> Last Reviewed: </label>
     <input type="date" name="lastReviewed" value="<%=searchOptions.lastReviewed%>">
-    <!-- <label> Place </label>
-    <input type="text" name="place" value="<%=searchOptions.place%>">
-    <label> City </label>
-    <input type="text" name="city" value="<%=searchOptions.city%>">
-    <label> Date </label>
-    <input type="date" name="date" value="<%=searchOptions.date%>"> -->
+    <label> Location
+        <select name="location">
+            <option value="" label=""></option>
+            <% locations.forEach (location => { %>
+                <% if (location.id === searchOptions.location) { %> 
+                <option selected value="<%= location._id%>" label="<%= location.location %>"> </option>
+                <% } else { %>
+                <option value="<%= location._id %>" label="<%= location.location%>"> </option>
+                <% } %>
+            <% }) %>
+        </select> 
+    </label>
     <button type="submit"> Search </button>
 </form>
 <br>

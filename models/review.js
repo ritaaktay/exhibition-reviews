@@ -3,8 +3,6 @@ const path = require('path')
 const Exhibition = require('./exhibition')
 const Comment = require('./comment')
 
-const imageBasePath = 'uploads/review_images'
-
 const reviewSchema = mongoose.Schema({
     // user_id: {
     //     type: mongoose.Schema.Types.ObjectId,
@@ -72,4 +70,3 @@ reviewSchema.virtual('hasImage').get(function () {
 })
 
 module.exports = mongoose.model('Review', reviewSchema)
-module.exports.imageBasePath = imageBasePath

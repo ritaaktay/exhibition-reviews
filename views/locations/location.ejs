@@ -1,0 +1,11 @@
+<body>
+    <h2> <%=location.location %> </h2>
+    <br>
+    <% exhibitions.forEach(exhibition => { %> 
+        <img height=50 src="<%= imageMap[exhibition.id]%>" >
+        <div> <a href="/exhibitions/<%=exhibition.id%>"> <%= exhibition.title %> </a> </div>
+        <div> <%= reviewMap[exhibition.id].content %> </div>
+        <br>
+    <% }) %>
+</body>
+
