@@ -5,15 +5,15 @@ const locationSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    city: {
-        type: String
-    },
     exhibition_ids : [{
         type: mongoose.Schema.Types.ObjectId,
-        // locations still get creates with empty exhibition_ids array
-        required: true,
         ref: 'Exhibition'
     }]
+})
+
+locationSchema.pre('remove', function(next) {
+    if (this.exhibition_ids.length > 0) next(new Error('Cannot delete a location that has reviews'))
+    else next()
 })
 
 module.exports = mongoose.model('Location', locationSchema)

@@ -1,0 +1,7 @@
+<!-- LOCATION EDIT FORM -->
+<form action="/locations/<%=location.id%>?_method=PUT" method="POST">
+    <label> Location:
+        <input type="text" name="location" value="<%=location.location%>" />
+    </label>
+    <button type="submit"> Update </button>
+</form>

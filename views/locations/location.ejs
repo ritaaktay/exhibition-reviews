@@ -1,11 +1,21 @@
 <body>
+    <!-- LOCATION -->
     <h2> <%=location.location %> </h2>
     <br>
+    <!-- EXHIBITIONS -->
     <% exhibitions.forEach(exhibition => { %> 
         <img height=50 src="<%= imageMap[exhibition.id]%>" >
         <div> <a href="/exhibitions/<%=exhibition.id%>"> <%= exhibition.title %> </a> </div>
-        <div> <%= reviewMap[exhibition.id].content %> </div>
+        <div> <%= exhibition.review_ids.pop().content %> </div>
         <br>
     <% }) %>
+    <br>
+    <!-- BUTTONS -->
+    <form action="<%=location.id%>/edit">
+        <button type="submit">EDIT</button>   
+    </form>
+    <form method="POST" action="/locations/<%=location.id%>?_method=DELETE">
+        <button type="submit">DELETE</button>   
+    </form>
 </body>
 

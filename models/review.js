@@ -4,11 +4,6 @@ const Exhibition = require('./exhibition')
 const Comment = require('./comment')
 
 const reviewSchema = mongoose.Schema({
-    // user_id: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     // required: true
-    // },
     exhibition_id : {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -23,9 +18,9 @@ const reviewSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    //use an array of objects {data : JSON , type: imageType}
     images: {
         type: Array
+        //{data : JSON encoded, type: MIME type}
     },
     comment_ids: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -33,7 +28,7 @@ const reviewSchema = mongoose.Schema({
     }]
 })
 
-//DELETES ALL CHILDREN COMMENTS AND REFERENCE IN PARENT EXHIBITION
+//deletes all comments and removes reference in exhibition
 reviewSchema.pre('remove', async function(next) {
     await Exhibition.updateOne(
         {_id: this.exhibition_id},
@@ -45,28 +40,15 @@ reviewSchema.pre('remove', async function(next) {
     next()
 })
 
-//this is for a single image
+//returns array of data URLs for encoded images
 reviewSchema.virtual('decodedImages').get(function() {
-    if (this.images != null) {
-        let decoded= []
-        this.images.forEach(image => {
-            decoded.push(
-                `data:${image.type};charset=utf-8;base64,${image.data.toString('base64')}`
-            )
-        })
-        return decoded
-    }
-})
-
-//if review has no images, returns false
-//if review has images, returns the first image as data URL
-reviewSchema.virtual('hasImage').get(function () {
-    if (this.images.length>0) {
-        let image = this.images[0]
-        return `data:${image.type};charset=utf-8;base64,${image.data.toString('base64')}`
-    } else {
-        return false
-    }
+    let decoded= []
+    this.images.forEach(image => {
+        decoded.push(
+            `data:${image.type};charset=utf-8;base64,${image.data.toString('base64')}`
+        )
+    })
+    return decoded
 })
 
 module.exports = mongoose.model('Review', reviewSchema)

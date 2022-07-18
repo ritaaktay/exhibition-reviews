@@ -1,8 +1,13 @@
-<!-- context variable reviews = array of all Reviews 
-exhibitionMap = review ids mapepd to exhibition documents-->
+<!-- REVIEWS -->
 <% reviews.forEach(review => { %>
+    <!-- ._id because reviews are now plain js objects after aggregation
+    no mongoose method .id but ._id also returns string -->
+    <div> <a href="/exhibitions/<%=review.exhibition[0]._id%>" > 
+        <%= review.exhibition[0].title %> </a> </div>
     <div> <%= review.content %> </div>
     <div> <%= review.createdAt %> </div>
-    <div> <a href="/exhibitions/<%=exhibitionMap[review.id].id%>" > 
-        <%= exhibitionMap[review.id].title %> </a> </div>
+    <% review.images.forEach(image => { %>
+        <img height=50 src="<%=image%>"> 
+    <% }) %>
+    <br>
 <% }) %>

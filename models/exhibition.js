@@ -24,26 +24,10 @@ const exhibitionSchema = mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
-    },
-    //createdAt of last review added
-    // lastActive: {
-    //     type: Date,
-    //     required: true,
-    //     default: Date.now
-    // },
-    // startDate: {
-    //     type: Date,
-    // },
-    // endDate: {
-    //     type: Date
-    // },
-    // rating: {
-    //     type: Number
-    // }
+    }
 })
 
-//REMOVE MIDDLEWARE: DELETES REVIEWS & THEIR COMMENTS 
-//REMOVES EXHIBITION ID FROM LOCATION EXHIBITION_IDS
+//deletes reviews and comments, removes exhibition id from location
 exhibitionSchema.pre('remove', async function(next) {
     await Location.updateOne(
         {_id: this.location_id},

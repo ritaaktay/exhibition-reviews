@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- filepond -->
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link
     href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
     rel="stylesheet"
     />
-    <!-- <script src="jquery-3.6.0.min.js"></script> -->
-    <!-- filepond -->
     <script defer src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script defer src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
@@ -20,8 +19,9 @@
 </head>
 <body>
     <%- include('../partials/header.ejs')  %> 
-    <%- body %>
-    <%- include('../partials/errMessage.ejs')  %> 
+    <!-- this is where the views are inserted -->
+    <%- body %> 
+    <%= locals.errMessage %> 
     <%- include('../partials/footer.ejs')  %> 
 </body>
 </html>

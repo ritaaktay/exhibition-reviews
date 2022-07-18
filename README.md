@@ -12,3 +12,6 @@ Users can add, browse and comment on exhibition reveiws.
 - MongoDB 5.0.9
 - Express.js 4.18.1
 - EJS 3.1.8
+
+## ToDo
+- User log-in, dashboard and admin privileges 

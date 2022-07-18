@@ -1,19 +1,11 @@
-//APP
 const express = require('express')
 const router = express.Router()
-//MODELS
+const mongoose = require('mongoose')
 const Exhibition = require('../models/exhibition')
 const Review = require('../models/review')
 const Comment = require('../models/comment')
-const mongoose = require('mongoose')
 
-router.get('/', async (req, res) => {
-    let comments = await Comment.find()
-    res.render('comments/index', {comments: comments})
-})
-//CREATE NEW COMMENT
-//sending params from comment form submission in _review.ejs
-//req.body.review = review.id
+
 router.post('/', async (req, res) => {
     var comment = new Comment ({
         content: req.body.comment,
@@ -21,28 +13,28 @@ router.post('/', async (req, res) => {
     })
     try {
         await comment.save()
-        let review = await Review.findOne({_id: req.body.review})
-        review.comment_ids.push(comment._id)
-        await review.save()
-        let exhibition = await Exhibition.findOne({_id: review.exhibition_id})
-        res.redirect(`exhibitions/${exhibition.id}`)
+        let review = await Review.findOneAndUpdate(
+            {_id: req.body.review},
+            { $push : {comment_ids: comment._id}},
+            {new : true}
+        )
+        console.log(review)
+        res.redirect(`exhibitions/${review.exhibition_id.toString()}`)
     } catch (err) {
         res.send(err.message)
     }
 })
 
+router.get('/:id/edit',(req, res) => {
+    res.send(`edit comment: ${req.params.id}`)
+})
+
 router.route('/:id')
-//ONE COMMENT
-.get((req, res) => {
-    res.send(`Comment: ${req.params.id}`)
-})
-//UPDATE COMMENT
 .put((req, res) => {
-    res.send(`Update Comment: ${req.params.id}`)
+    res.send(`update comment: ${req.params.id}`)
 })
-//DELETE COMMET
 .delete((req, res) => {
-    res.send(`Delete Comment: ${req.params.id}`)
+    res.send(`delete comment: ${req.params.id}`)
 })
 
 module.exports = router

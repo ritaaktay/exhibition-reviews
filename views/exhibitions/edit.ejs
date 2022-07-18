@@ -1,5 +1,5 @@
 <body>
-    <form action="/exhibitions" method="POST">
+    <form action="/exhibitions/<%=exhibition.id%>?_method=PUT" method="POST">
         <div>
             <label> Title<sup>*</sup>  
                 <input required type="text" name="title" value="<%=exhibition.title%>" /> 
@@ -9,9 +9,8 @@
         <div>
             <label> Location<sup>*</sup>
                 <select required name="location">
-                    <option value="default" selected disabled ></option>
                     <% locations.forEach (location => { %>
-                        <% if (location.id === exhibition.location_id) { %> 
+                        <% if (location._id === exhibition.location_id) { %> 
                         <option selected value="<%= location._id%>" label="<%= location.location %>"> </option>
                         <% } else { %>
                         <option value="<%= location._id %>" label="<%= location.location%>"> </option>
@@ -21,18 +20,6 @@
             </label> 
         </div>
     <br>
-        <div>
-            <lable> Your thoughts<sup>*</sup> <br>
-                <textarea required style="width:60%" name="review" ><%= review.content %></textarea>
-            </lable>
-        </div>
-    <br>
-        <div>
-            <lable> Images
-                <input type="file" class="filepond" name="image" accept="image/*" >
-            </lable>
-        </div>
-    <br>
-        <button type="submit"> Post Review </button>
+        <button type="submit"> Update </button>
     </form>
 </body>

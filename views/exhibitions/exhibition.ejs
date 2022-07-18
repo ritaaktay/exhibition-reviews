@@ -1,25 +1,31 @@
-<!-- context variables are exhibition = exhibition document, 
-    location = location document,
-    reviews = array of review documents, 
-    commentMap = review.ids mapped to arrays of comment documents -->
 <body>
-    <h2> <%=exhibition.title%> </h2>
-    <span> <%=location.location%> </span> <br>
+    <div><h2> <%=exhibition.title%></h2></div>
+    <div><span><%=exhibition.location_id.location%></span></div> 
     <br>
     <form action="/reviews" method="POST">
         <lable> Your thoughts: <br>
             <textarea required style="width:60%" name="review" ></textarea>
         </lable> <br>
-        <lable> Images 
+        <br>
+        <lable> Images <br>
             <input type="file" class="filepond" name="image" accept="image/*" multiple > 
-        </lable> <br>
+        </lable> 
         <!-- I want this button to display/hide form onclick -->
         <button type="submit" name="exhibition" value="<%=exhibition._id%>"> + </button>
     </form>
     <br>
-    <% reviews.forEach(review => { %>
-        <%- include('../reviews/_review.ejs', {review: review, commentMap: commentMap}) %>
+    <br>
+    <% exhibition.review_ids.forEach(review => { %>
+        <%- include('../reviews/_review.ejs', {review: review}) %>
+        <br>
     <% }) %>
-    
+    <form action="<%=exhibition.id%>/edit">
+        <button type="submit">EDIT</button>   
+    </form>
+    <br>
+    <!-- using method override to submit forms with delete request -->
+    <form method="POST" action="/exhibitions/<%=exhibition.id%>?_method=DELETE">
+        <button type="submit">DELETE</button>   
+    </form>
 </body>
 

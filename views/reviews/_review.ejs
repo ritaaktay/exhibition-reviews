@@ -1,23 +1,27 @@
-<!-- context variables are review = review document
-    commentMap = review.ids mapped to arrays of comment documents -->
 <div>
+    <!-- REVIEW -->
     <strong>Review</strong> 
     <br>
     <p> <%= review.content%> </p>
+    <!-- IMAGES -->
     <div>
     <% review.decodedImages.forEach(image => { %>
         <img height=200 src="<%=image%>"> 
     <% }) %>
-    </div> <br>
+    </div> 
+    <br>
     <span> <%= review.createdAt.toLocaleString('en-UK', {
                     timeStyle: "short",
                     dateStyle: "medium"})%> </span>
-    <br><br>
+    <br>
+    <br>
+    <!-- COMMENTS -->
     <strong>Comments</strong>
-    <% commentMap[review.id].forEach(comment => { %>
-        <%- include('../partials/comment.ejs', {comment : comment}) %> 
+    <% review.comment_ids.forEach(comment => { %>
+        <%- include('../comments/_comment.ejs', {comment : comment}) %> 
     <% }) %>
     <br>
+    <!-- ADD COMMENT FORM -->
     <form action="/comments" method="POST"> 
         <input type="text" name="comment">
         <button type="submit" name="review" value=<%=review.id%> >Comment</button>
