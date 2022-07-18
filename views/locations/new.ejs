@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Location Form</title>
-</head>
-<body>
-    <header>
-       Create New Location
-    </header>
-    <form action="/locations" method="POST">
-        <label> Location:
-            <input type="text" name="location" value="<%=location.location%>" />
-        </label>
-        <button type="submit"> create </button>
-    </form>
-</body>
-</html>
+<!-- NEW LOCATION FORM -->
+<form action="/locations" method="POST">
+    <label> Location:
+        <input type="text" name="location" value="<%=location.location%>" />
+    </label>
+    <button type="submit"> create </button>
+</form>
