@@ -1,0 +1,10 @@
+@import 'shared/fonts.css';
+
+:root {
+    font-family: 'Open Sans';
+    font-size: 16px;
+}
+
+body {
+    background: white;
+}
