@@ -1,6 +1,6 @@
 ## Exhibition Reveiws
 
-A CRUD web app for crowd-sourced reviews of cultural events.
+A React app for crowd-sourced reviews of cultural events, written in TypeScript
 
 ## Demo
 

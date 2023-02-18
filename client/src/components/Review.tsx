@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Review = ({ review }: Props): JSX.Element => {
-  const formatDate: (a: string) => string = (date) => {
+  const formatDate: (date: string) => string = (date) => {
     const day = date.split("T")[0];
     const time = date.split("T")[1].slice(0, 5);
     return "On " + day + " at " + time;
